@@ -6,7 +6,8 @@ from timeout import Timeout
 
 
 ARG = "timeout_ms,first_check_s,second_check_s"
-VALUES = ((10, .005, .006), (1, .0005, .0011), (100, .05, .06), (1000, .5, .6))
+VALUES = ((10, 0.005, 0.006), (1, 0.0005, 0.0011), (100, 0.05, 0.06), (1000, 0.5, 0.6))
+
 
 @pytest.mark.parametrize(ARG, VALUES)
 def test_remaining(timeout_ms, first_check_s, second_check_s):
