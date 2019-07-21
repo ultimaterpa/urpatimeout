@@ -1,6 +1,6 @@
 """Modul časového limitu v robotizaci."""
 
-import datetime
+import time
 
 
 class Timeout:
@@ -23,7 +23,7 @@ class Timeout:
                     Trvání časového limitu v ms.
         """
         self.timeout = timeout
-        self.start = datetime.datetime.now()
+        self.start = time.monotonic_ns()
 
     def elapsed(self):
         """Vrací integer kolik ms uplynulo od začátku časového limitu.
@@ -31,7 +31,7 @@ class Timeout:
             Returns:
                 int
         """
-        return int((datetime.datetime.now() - self.start).total_seconds() * 1000)
+        return (time.monotonic_ns() - self.start) // 1e6
 
     def remaining(self):
         """Vrací integer kolik ms ještě zbývá do vypršení časového limitu.
@@ -47,4 +47,4 @@ class Timeout:
             Returns:
                 bool
         """
-        return int(self.timeout - self.elapsed()) <= 0
+        return self.remaining() <= 0
