@@ -39,7 +39,7 @@ class Timeout:
             Returns:
                 int
         """
-        return int(self.timeout - self.elapsed())
+        return self.timeout - self.elapsed()
 
     def is_expired(self):
         """Vrací True pokud časový limit vypršel jinak False.
