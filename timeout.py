@@ -15,33 +15,33 @@ class Timeout:
         app.find_first(cf.name("John"), search_timeout)
     """
 
-    def __init__(self, timeout):
+    def __init__(self, timeout: float) -> None:
         """Inicializace instance třídy Timeout.
 
             Args:
-                timeout: int
+                timeout: float
                     Trvání časového limitu v ms.
         """
         self.timeout = timeout
         self.start = time.monotonic_ns()
 
-    def elapsed(self):
+    def elapsed(self) -> float:
         """Vrací integer kolik ms uplynulo od začátku časového limitu.
 
             Returns:
-                int
+                float
         """
         return (time.monotonic_ns() - self.start) // 1e6
 
-    def remaining(self):
+    def remaining(self) -> float:
         """Vrací integer kolik ms ještě zbývá do vypršení časového limitu.
 
             Returns:
-                int
+                float
         """
         return self.timeout - self.elapsed()
 
-    def is_expired(self):
+    def is_expired(self) -> bool:
         """Vrací True pokud časový limit vypršel jinak False.
 
             Returns:
