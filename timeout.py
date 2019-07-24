@@ -22,8 +22,10 @@ class Timeout:
                 timeout: int
                     Trvání časového limitu v ms.
         """
-        self.timeout = timeout
         self.start = time.monotonic_ns()
+        if not isinstance(timeout, int) or timeout <= 0:
+            raise TypeError("timeout must be int bigger then 0.")
+        self.timeout = timeout
 
     def elapsed(self):
         """Vrací integer kolik ms uplynulo od začátku časového limitu.
@@ -31,7 +33,7 @@ class Timeout:
             Returns:
                 int
         """
-        return (time.monotonic_ns() - self.start) // 1e6
+        return (time.monotonic_ns() - self.start) // 1000000
 
     def remaining(self):
         """Vrací integer kolik ms ještě zbývá do vypršení časového limitu.
