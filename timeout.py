@@ -1,26 +1,27 @@
-"""Modul časového limitu v robotizaci."""
+"""Modul for time limit in robotisation."""
 
 import time
 
 
 class Timeout:
-    """Třída reprezentující časový limit.
+    """Class which represent time limit.
 
-    Třídu lze použít pro nastavení a měření časových limitů pro několik hledání nebo celou robotizaci.
+    Class is for setting up and messuring time limits for multiple searches or for whole robotisation script.
 
     Examples:
-        # příklad nastavení globálního časového limit pro několik hledání
+        # For example, setting up global time limit for mutliple searches.
+
         search_timeout = Timeout(5000)
         app.find_first(cf.value("John"), search_timeout)
         app.find_first(cf.name("John"), search_timeout)
     """
 
     def __init__(self, timeout):
-        """Inicializace instance třídy Timeout.
+        """Initialization of instance of class Timeout. 
 
             Args:
                 timeout: int
-                    Trvání časového limitu v ms.
+                    Duration of time limit in ms.
         """
         self.start = time.monotonic_ns()
         if not isinstance(timeout, int) or timeout <= 0:
@@ -28,7 +29,7 @@ class Timeout:
         self.timeout = timeout
 
     def elapsed(self):
-        """Vrací integer kolik ms uplynulo od začátku časového limitu.
+        """Return integer which show how many ms has passed since start of time limit.
 
             Returns:
                 int
@@ -36,7 +37,7 @@ class Timeout:
         return (time.monotonic_ns() - self.start) // 1000000
 
     def remaining(self):
-        """Vrací integer kolik ms ještě zbývá do vypršení časového limitu.
+        """Return integer which show how many ms till expiration of time limit.
 
             Returns:
                 int
@@ -44,7 +45,7 @@ class Timeout:
         return self.timeout - self.elapsed()
 
     def is_expired(self):
-        """Vrací True pokud časový limit vypršel jinak False.
+        """Return True if time limit expired.
 
             Returns:
                 bool
