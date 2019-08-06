@@ -1,2 +1,2 @@
 # timeout
-Extension for timeout in UltimateRPA
+Extension for timeout in [UltimateRPA](https://www.ultimaterpa.com).

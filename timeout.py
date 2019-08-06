@@ -1,48 +1,51 @@
-"""Modul časového limitu v robotizaci."""
+"""Modul for time limit in robotisation."""
 
 import time
 
 
 class Timeout:
-    """Třída reprezentující časový limit.
+    """Class which represent time limit.
 
-    Třídu lze použít pro nastavení a měření časových limitů pro několik hledání nebo celou robotizaci.
+    Class is for setting up and messuring time limits for multiple searches or for whole robotisation script.
 
     Examples:
-        # příklad nastavení globálního časového limit pro několik hledání
+        # For example, setting up global time limit for mutliple searches.
+
         search_timeout = Timeout(5000)
         app.find_first(cf.value("John"), search_timeout)
         app.find_first(cf.name("John"), search_timeout)
     """
 
-    def __init__(self, timeout: float) -> None:
-        """Inicializace instance třídy Timeout.
+    def __init__(self, timeout):
+        """Initialization of instance of class Timeout.
 
             Args:
-                timeout: float
-                    Trvání časového limitu v ms.
+                timeout: int
+                    Duration of time limit in ms.
         """
-        self.timeout = timeout
         self.start = time.monotonic_ns()
+        if not isinstance(timeout, int) or timeout <= 0:
+            raise TypeError("timeout must be int bigger then 0.")
+        self.timeout = timeout
 
-    def elapsed(self) -> float:
-        """Vrací integer kolik ms uplynulo od začátku časového limitu.
+    def elapsed(self):
+        """Return integer which show how many ms has passed since start of time limit.
 
             Returns:
-                float
+                int
         """
-        return (time.monotonic_ns() - self.start) // 1e6
+        return (time.monotonic_ns() - self.start) // 1000000
 
-    def remaining(self) -> float:
-        """Vrací integer kolik ms ještě zbývá do vypršení časového limitu.
+    def remaining(self):
+        """Return integer which show how many ms till expiration of time limit.
 
             Returns:
-                float
+                int
         """
         return self.timeout - self.elapsed()
 
     def is_expired(self) -> bool:
-        """Vrací True pokud časový limit vypršel jinak False.
+        """Return True if time limit expired.
 
             Returns:
                 bool
