@@ -16,8 +16,8 @@ class Timeout:
         app.find_first(cf.name("John"), search_timeout)
     """
 
-    def __init__(self, timeout):
-        """Initialization of instance of class Timeout. 
+    def __init__(self, timeout: int) -> None:
+        """Initialization of instance of class Timeout.
 
             Args:
                 timeout: int
@@ -28,7 +28,7 @@ class Timeout:
             raise TypeError("timeout must be int bigger then 0.")
         self.timeout = timeout
 
-    def elapsed(self):
+    def elapsed(self) -> int:
         """Return integer which show how many ms has passed since start of time limit.
 
             Returns:
@@ -36,7 +36,7 @@ class Timeout:
         """
         return (time.monotonic_ns() - self.start) // 1000000
 
-    def remaining(self):
+    def remaining(self) -> int:
         """Return integer which show how many ms till expiration of time limit.
 
             Returns:
@@ -44,7 +44,7 @@ class Timeout:
         """
         return self.timeout - self.elapsed()
 
-    def is_expired(self):
+    def is_expired(self) -> bool:
         """Return True if time limit expired.
 
             Returns:
