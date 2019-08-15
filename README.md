@@ -4,7 +4,7 @@ can be used for setting up and measuring time limits for multiple searches or fo
 
 ## Examples
 
-###Setting up a global time limit for multiple searches. 
+Setting up a global time limit for multiple searches. 
 
 ```python
 from timeout import Timeout
@@ -15,7 +15,7 @@ app.find_first(cf.name("Username").text(), search_timeout)
 app.find_first(cf.name("Username").edit(), search_timeout)
 ```
 
-###Setting up a time limit for the whole robotisation script.
+Setting up a time limit for the whole robotisation script.
 In this example, expiration of the timeout for the whole script is set to 17:00. 
 
 ```python
