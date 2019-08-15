@@ -15,20 +15,13 @@ app.find_first(cf.name("Username").text(), search_timeout)
 app.find_first(cf.name("Username").edit(), search_timeout)
 ```
 
-Setting up a time limit for the whole robotisation script.
-In this example, expiration of the timeout for the whole script is set to 17:00. 
+Setting up a time limit for the whole robotisation script. 
 
 ```python
 import datetime
 from timeout import Timeout
 
-def set_timeout():
-	current_hour = datetime.datetime.now().hour
-	timeout = (17 - current_hour) if current_hour < 17 else 0
-	return timeout * 3600000
-
-def main():
-	timeout = Timeout(set_timeout())
-	while not timeout.is_expired():
-		do_something()
+timeout = Timeout(3600000)
+while not timeout.is_expired():
+	do_something()
 ```
