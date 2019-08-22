@@ -21,7 +21,7 @@ Setting up a time limit for the whole robotization script.
 import datetime
 from timeout import Timeout
 
-timeout = Timeout(3600000)
+timeout = Timeout(60 * 60 * 1000)
 while not timeout.is_expired():
 	do_something()
 ```
