@@ -1,15 +1,15 @@
-"""Modul for time limit in robotisation."""
+"""Module for time limit in robotization."""
 
 import time
 
 
 class Timeout:
-    """Class which represent time limit.
+    """Class which represents time limit.
 
-    Class is for setting up and messuring time limits for multiple searches or for whole robotisation script.
+    Class is for setting up and measuring time limits for multiple searches or whole robotization script.
 
     Examples:
-        # For example, setting up global time limit for mutliple searches.
+        # For example, setting up a global time limit for multiple searches.
 
         search_timeout = Timeout(5000)
         app.find_first(cf.value("John"), search_timeout)
@@ -29,7 +29,7 @@ class Timeout:
         self.timeout = timeout
 
     def elapsed(self) -> int:
-        """Return integer which show how many ms has passed since start of time limit.
+        """Returns integer which shows how many ms have passed since the start of time limit.
 
             Returns:
                 int
@@ -37,7 +37,7 @@ class Timeout:
         return (time.monotonic_ns() - self.start) // 1000000
 
     def remaining(self) -> int:
-        """Return integer which show how many ms till expiration of time limit.
+        """Returns integer which shows how many ms are remaining till the expiration of time limit.
 
             Returns:
                 int
@@ -45,7 +45,7 @@ class Timeout:
         return self.timeout - self.elapsed()
 
     def is_expired(self) -> bool:
-        """Return True if time limit expired.
+        """Returns True if time limit expired.
 
             Returns:
                 bool
