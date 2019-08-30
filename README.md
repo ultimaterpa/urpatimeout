@@ -1,9 +1,9 @@
 # timeout
-Extension for timeout in [UltimateRPA](https://www.ultimaterpa.com).
+Extension for timeout in [UltimateRPA](https://www.ultimaterpa.com).  
 You need to have the [UltimateRPA Tools installed](https://www.ultimaterpa.com/documentation/_install.html).  
-Helps you with setting up and measuring time limits 
-- for multiple searches 
-- or for the whole robotization script.
+It helps you with setting up and measuring time limits 
+- for multiple searches, 
+- for the whole robotization script.
 
 
 ## Examples
