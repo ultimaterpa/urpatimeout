@@ -46,7 +46,7 @@ def test_elapsed(more_ms):
     assert elapsed >= more_ms and elapsed <= less_ms
 
 
-@pytest.mark.parametrize("wrong_timeout", (-3.1, -1, 0.0, 0, 1.0, 1e10))
+@pytest.mark.parametrize("wrong_timeout", (-3.1, 0.0, 1.0, 1e10))
 def test_init(wrong_timeout):
     with pytest.raises(TypeError):
         Timeout(wrong_timeout)
