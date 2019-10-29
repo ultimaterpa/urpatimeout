@@ -6,6 +6,7 @@ from timeout import Timeout
 
 
 TIMEOUTS_MS = (2, 10, 50, 100, 200, 1000, 1500, 5000, 20000)
+NEGATIVE_TIMEOUTS_MS = (-100, -10, -1, 0)
 
 
 @pytest.fixture(params=TIMEOUTS_MS)
@@ -60,3 +61,15 @@ def test_remaining_type(timeout_ms):
 def test_elapsed_type(timeout_ms):
     t = Timeout(timeout_ms)
     assert type(t.elapsed()) is int
+
+
+@pytest.mark.parametrize("timeout_ms", NEGATIVE_TIMEOUTS_MS)
+def test_remaining_negative_value(timeout_ms):
+    t = Timeout(timeout_ms)
+    assert t.remaining() == 0
+
+
+@pytest.mark.parametrize("timeout_ms", NEGATIVE_TIMEOUTS_MS)
+def test_is_expired_negative_value(timeout_ms):
+    t = Timeout(timeout_ms)
+    assert t.is_expired()
