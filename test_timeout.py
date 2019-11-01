@@ -5,16 +5,16 @@ import pytest
 from timeout import Timeout
 
 
-TIMEOUTS_MS = (2, 10, 50, 100, 200, 1000, 1500, 5000, 20000)
-NEGATIVE_TIMEOUTS_MS = (-100, -10, -1, 0)
+POSITIVE_TIMEOUTS_MS = (2, 10, 50, 100, 200, 1000, 1500, 5000, 20000)
+NONPOSITIVE_TIMEOUTS_MS = (-100, -10, -1, 0)
 
 
-@pytest.fixture(params=TIMEOUTS_MS)
+@pytest.fixture(params=POSITIVE_TIMEOUTS_MS)
 def timeout_ms(request):
     return request.param
 
 
-@pytest.fixture(params=TIMEOUTS_MS)
+@pytest.fixture(params=POSITIVE_TIMEOUTS_MS)
 def timeout_checks(request):
     return request.param, request.param // 2 / 1000, request.param * 1.1 / 1000
 
@@ -63,13 +63,13 @@ def test_elapsed_type(timeout_ms):
     assert type(t.elapsed()) is int
 
 
-@pytest.mark.parametrize("timeout_ms", NEGATIVE_TIMEOUTS_MS)
+@pytest.mark.parametrize("timeout_ms", NONPOSITIVE_TIMEOUTS_MS)
 def test_remaining_negative_value(timeout_ms):
     t = Timeout(timeout_ms)
     assert t.remaining() == 0
 
 
-@pytest.mark.parametrize("timeout_ms", NEGATIVE_TIMEOUTS_MS)
+@pytest.mark.parametrize("timeout_ms", NONPOSITIVE_TIMEOUTS_MS)
 def test_is_expired_negative_value(timeout_ms):
     t = Timeout(timeout_ms)
     assert t.is_expired()
