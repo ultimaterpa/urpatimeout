@@ -24,8 +24,10 @@ class Timeout:
                     Duration of time limit in ms.
         """
         self.start = time.monotonic_ns()
-        if not isinstance(timeout, int) or timeout <= 0:
-            raise TypeError("timeout must be int bigger then 0.")
+        if not isinstance(timeout, int):
+            raise TypeError("timeout must be int.")
+        if timeout < 0:
+            timeout = 0
         self.timeout = timeout
 
     def elapsed(self) -> int:
