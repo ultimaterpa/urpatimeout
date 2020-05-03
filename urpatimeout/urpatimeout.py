@@ -23,7 +23,7 @@ class Timeout:
                 timeout: int
                     Duration of time limit in ms.
         """
-        self.start = time.monotonic_ns()
+        self.start = time.time_ns()
         if not isinstance(timeout, int):
             raise TypeError("timeout must be int.")
         if timeout < 0:
@@ -36,7 +36,7 @@ class Timeout:
             Returns:
                 int
         """
-        return (time.monotonic_ns() - self.start) // 1000000
+        return (time.time_ns() - self.start) // 1000000
 
     def remaining(self) -> int:
         """Returns integer which shows how many ms are remaining till the expiration of time limit.
