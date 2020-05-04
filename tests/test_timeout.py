@@ -1,8 +1,9 @@
 import time
 
+import freezegun
 import pytest
 
-from timeout import Timeout
+from urpatimeout import Timeout
 
 
 POSITIVE_TIMEOUTS_MS = (2, 10, 50, 100, 200, 1000, 1500, 5000, 20000)
@@ -17,6 +18,32 @@ def positive_timeout_ms(request):
 @pytest.fixture(params=POSITIVE_TIMEOUTS_MS)
 def positive_timeout_checks(request):
     return request.param, request.param // 2 / 1000, request.param * 1.1 / 1000
+
+
+@pytest.mark.smoke
+@freezegun.freeze_time(auto_tick_seconds=5)
+def test_remaining_smoke():
+    t = Timeout(10000)
+    assert t.remaining() == 5000
+    assert t.remaining() == 0
+
+
+@pytest.mark.smoke
+@freezegun.freeze_time(auto_tick_seconds=5)
+def test_elapsed_smoke():
+    t = Timeout(10000)
+    assert t.elapsed() == 5000
+    assert t.elapsed() == 10000
+
+
+@pytest.mark.smoke
+@freezegun.freeze_time(auto_tick_seconds=5)
+def test_expired_smoke():
+    t = Timeout(10000)
+    assert not t.is_expired()
+    assert t.is_expired()
+
+
 
 
 def test_remaining(positive_timeout_checks):
