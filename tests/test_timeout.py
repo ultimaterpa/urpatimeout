@@ -6,18 +6,12 @@ import pytest
 from urpatimeout import Timeout
 
 
-POSITIVE_TIMEOUTS_MS = (2, 10, 50, 100, 200, 1000, 1500, 5000, 20000)
-NONPOSITIVE_TIMEOUTS_MS = (-100, -10, -1, 0)
+TIMEOUTS_MS = (0, 100, 1000, 5000, 30000, 60000, 18000)
 
 
-@pytest.fixture(params=POSITIVE_TIMEOUTS_MS)
-def positive_timeout_ms(request):
+@pytest.fixture(params=TIMEOUTS_MS)
+def timeout_ms(request):
     return request.param
-
-
-@pytest.fixture(params=POSITIVE_TIMEOUTS_MS)
-def positive_timeout_checks(request):
-    return request.param, request.param // 2 / 1000, request.param * 1.1 / 1000
 
 
 @pytest.mark.smoke
@@ -44,59 +38,34 @@ def test_expired_smoke():
     assert t.is_expired()
 
 
-
-
-def test_remaining(positive_timeout_checks):
-    timeout_ms, first_check_s, second_check_s = positive_timeout_checks
+@freezegun.freeze_time(auto_tick_seconds=1)
+def test_remaining_type(timeout_ms):
     t = Timeout(timeout_ms)
-    time.sleep(first_check_s)
-    assert t.remaining() > 0
-    time.sleep(second_check_s)
-    assert t.remaining() < 0
+    assert isinstance(t.remaining(), int)
 
 
-def test_is_expired(positive_timeout_checks):
-    timeout_ms, first_check_s, second_check_s = positive_timeout_checks
+@freezegun.freeze_time(auto_tick_seconds=1)
+def test_elapsed_type(timeout_ms):
     t = Timeout(timeout_ms)
-    time.sleep(first_check_s)
-    assert t.is_expired() is False
-    time.sleep(second_check_s)
-    assert t.is_expired()
+    assert isinstance(t.elapsed(), int)
 
 
-@pytest.mark.parametrize("more_ms", (5, 20, 40, 300, 1000, 5000, 20000))
-def test_elapsed(more_ms):
-    delay_s = more_ms / 1000
-    less_ms = more_ms + 5
-    t = Timeout(1000000)
-    time.sleep(delay_s)
-    elapsed = t.elapsed()
-    assert elapsed >= more_ms and elapsed <= less_ms
+@freezegun.freeze_time(auto_tick_seconds=1)
+def test_is_expired_type(timeout_ms):
+    t = Timeout(timeout_ms)
+    assert isinstance(t.is_expired(), bool)
 
 
-@pytest.mark.parametrize("wrong_timeout", (-3.1, 0.0, 1.0, 1e10))
-def test_init(wrong_timeout):
+@pytest.mark.parametrize(
+    "type_error_timeout",
+    ([1], {2}, {1: 1}, [], {}, dict(), "", "a", -3.1, 0.0, 1.0, 1e10),
+)
+def test_type_error(type_error_timeout):
     with pytest.raises(TypeError):
-        Timeout(wrong_timeout)
+        Timeout(type_error_timeout)
 
 
-def test_remaining_type(positive_timeout_ms):
-    t = Timeout(positive_timeout_ms)
-    assert type(t.remaining()) is int
-
-
-def test_elapsed_type(positive_timeout_ms):
-    t = Timeout(positive_timeout_ms)
-    assert type(t.elapsed()) is int
-
-
-@pytest.mark.parametrize("nonpositive_timeout_ms", NONPOSITIVE_TIMEOUTS_MS)
-def test_remaining_nonpositive_value(nonpositive_timeout_ms):
-    t = Timeout(nonpositive_timeout_ms)
-    assert t.remaining() == 0
-
-
-@pytest.mark.parametrize("nonpositive_timeout_ms", NONPOSITIVE_TIMEOUTS_MS)
-def test_is_expired_nonpositive_value(nonpositive_timeout_ms):
-    t = Timeout(nonpositive_timeout_ms)
-    assert t.is_expired()
+@pytest.mark.parametrize("value_error_timeout", (-1, -1000, -10000))
+def test_value_error(value_error_timeout):
+    with pytest.raises(ValueError):
+        Timeout(value_error_timeout)

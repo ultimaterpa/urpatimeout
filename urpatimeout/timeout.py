@@ -25,9 +25,11 @@ class Timeout:
         """
         self.start = time.time_ns()
         if not isinstance(timeout, int):
-            raise TypeError("timeout must be int.")
+            raise TypeError(f"timeout type must be an int, not an '{type(timeout)}'!")
         if timeout < 0:
-            timeout = 0
+            raise ValueError(
+                f"timeout value must be a positive int, not a '{timeout}'!"
+            )
         self.timeout = timeout
 
     def elapsed(self) -> int:
