@@ -1,6 +1,8 @@
 import time
 
 import freezegun
+from hypothesis import given
+import hypothesis.strategies as st
 import pytest
 
 from urpatimeout import Timeout
@@ -50,9 +52,10 @@ def test_elapsed_type(timeout_ms):
     assert isinstance(t.elapsed(), int)
 
 
+@given(timeout=st.integers(min_value=0))
 @freezegun.freeze_time(auto_tick_seconds=1)
-def test_is_expired_type(timeout_ms):
-    t = Timeout(timeout_ms)
+def test_is_expired_type(timeout):
+    t = Timeout(timeout)
     assert isinstance(t.is_expired(), bool)
 
 
@@ -65,7 +68,7 @@ def test_type_error(type_error_timeout):
         Timeout(type_error_timeout)
 
 
-@pytest.mark.parametrize("value_error_timeout", (-1, -1000, -10000))
-def test_value_error(value_error_timeout):
+@given(timeout=st.integers(max_value=-1))
+def test_value_error(timeout):
     with pytest.raises(ValueError):
-        Timeout(value_error_timeout)
+        Timeout(timeout)
