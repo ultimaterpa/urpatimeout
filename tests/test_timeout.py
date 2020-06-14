@@ -9,6 +9,14 @@ import pytest
 from urpatimeout import Timeout
 
 
+def everything_except(excluded_types):
+    return (
+        st.from_type(type)
+        .flatmap(st.from_type)
+        .filter(lambda x: not isinstance(x, excluded_types))
+    )
+
+
 @pytest.mark.smoke
 @freezegun.freeze_time(auto_tick_seconds=5)
 def test_remaining_input_int():
@@ -84,10 +92,7 @@ def test_is_expired_type(timeout):
     assert isinstance(t.is_expired(), bool)
 
 
-@pytest.mark.parametrize(
-    "type_error_timeout",
-    ([1], {2}, {1: 1}, [], {}, dict(), "", "a", -3.1, 0.0, 1.0, 1e10),
-)
+@given(type_error_timeout=everything_except((int, datetime.datetime)))
 def test_type_error(type_error_timeout):
     with pytest.raises(TypeError):
         Timeout(type_error_timeout)
