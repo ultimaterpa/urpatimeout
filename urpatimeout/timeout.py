@@ -1,4 +1,8 @@
-"""Module for time limit in robotization."""
+"""Urpatimeout is a module for managing timeouts inside UltimateRPA https://www.ultimaterpa.com scripts.
+It helps you with setting up and measuring time limits:
+- for multiple searches
+- for the whole or part of the script
+"""
 
 from __future__ import annotations
 import datetime
@@ -7,9 +11,7 @@ from typing import Union
 
 
 class Timeout:
-    """Class which represents time limit.
-
-    Class is for setting up and measuring time limits for multiple searches or whole robotization script.
+    """Class Timeout represents time limit.
 
     Examples:
         # For example, setting up a global time limit for multiple searches.
@@ -23,13 +25,13 @@ class Timeout:
         """Initialization of instance of class Timeout.
 
             Args:
-                timeout: int
-                    Duration of time limit in ms.
+                timeout: int or datetime.datetime
+                    Duration of time limit in ms or date.
         """
         self.start = time.time_ns()
         if not isinstance(timeout, (int, datetime.datetime)):
             raise TypeError(
-                f"timeout type must be an int or datetime.datetime, not an '{type(timeout)}'!"
+                f"timeout type must be an int or datetime.datetime, not a '{type(timeout)}'!"
             )
         if isinstance(timeout, datetime.datetime):
             timeout = (

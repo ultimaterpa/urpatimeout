@@ -1,8 +1,8 @@
 # urpatimeout
-Extension for setting timeouts in [UltimateRPA](https://www.ultimaterpa.com).   
-It helps you with setting up and measuring time limits: 
-- for multiple searches, 
-- for the whole robotization script.
+Urpatimeout is a module for managing timeouts inside [UltimateRPA](https://www.ultimaterpa.com) scripts.
+It helps you with setting up and measuring time limits:
+- for multiple searches
+- for the whole or part of the script
 
 ## Install
 
@@ -17,13 +17,13 @@ pip install urpatimeout
 ```python
 import urpatimeout
 
-timeout = urpatimeout.Timeout(10 * 1000)
+timeout = urpatimeout.Timeout(10_000)
 app = urpa.exec_app("Some_application.exe")
 app.find_first(cf.name("Username").text(), timeout=timeout)
 app.find_first(cf.name("Password").text(), timeout=timeout)
 ```
 
-### Setting up a Time Limit for the Whole Robotization Script
+### Setting up a Time Limit for Part of the Script
 
 ```python
 import urpatimeout
@@ -31,6 +31,17 @@ import urpatimeout
 timeout = urpatimeout.Timeout(60 * 60 * 1000)
 while not timeout.is_expired():
 	do_something()
+```
+
+### Using datatime.datetime for Setting up the Time Limit
+
+```python
+import datetime
+import urpatimeout
+
+timeout = Timeout(datetime.datetime(2O29, 1, 15)
+while not timeout.is_expired():
+    do_something_else()
 ```
 
 ## Changelog
