@@ -1,7 +1,12 @@
-"""Urpatimeout is a module for managing timeouts inside UltimateRPA https://www.ultimaterpa.com scripts.
+"""Urpatimeout is a module for managing timeouts inside UltimateRPA scripts.
+https://www.ultimaterpa.com
+
+Features:
 It helps you with setting up and measuring time limits:
-- for multiple searches
-- for the whole or part of the script
+- set up timeout for multiple searches in UltimateRPA
+- set up timeout for part or whole of the script
+- use `datetime.datetime` as an input
+- no 3rd party modules dependencies
 """
 
 from __future__ import annotations
@@ -39,7 +44,7 @@ class Timeout:
             ) // 1_000_000
         if timeout < 0:
             raise ValueError(
-                f"timeout value must be a positive int or a datetime.datetime in the future!"
+                "timeout value must be a positive int or a datetime.datetime in the future!"
             )
         self.timeout = timeout
 
