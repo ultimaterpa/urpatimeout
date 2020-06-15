@@ -1,0 +1,8 @@
+"""Information about urpatimeout module."""
+__title__ = "urpatimeout"
+__description__ = "Modul for managing timeouts inside UltimateRPA"
+__version__ = "0.1.0"
+__author__ = "SlavaQQ"
+__author_email__ = "support@ultimaterpa.cz"
+__url__ = "https://github.com/ultimaterpa/urpatimeout"
+__license__ = "MIT"
