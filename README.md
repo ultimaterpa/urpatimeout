@@ -1,7 +1,8 @@
 # urpatimeout
 urpatimeout is a module for managing timeouts inside [UltimateRPA](https://www.ultimaterpa.com) scripts.
 
-# Features
+## Features
+
 It helps you with setting up and measuring time limits:
 - set up timeout for multiple searches in UltimateRPA
 - set up timeout for part or whole of the script
@@ -43,14 +44,14 @@ while not timeout.is_expired():
 import datetime
 import urpatimeout
 
-timeout = Timeout(datetime.datetime(2O29, 1, 15))
+timeout = urpatimeout.Timeout(datetime.datetime(2O29, 1, 15))
 while not timeout.is_expired():
     do_something_else()
 ```
 
 ## Changelog
 
-[Changelog is here]("https://github.com/ultimaterpa/urpatimeout/blob/master/CHANGELOG.md")
+[Changelog is here](https://github.com/ultimaterpa/urpatimeout/blob/master/CHANGELOG.md)
 
 ## Contribute
 
