@@ -19,9 +19,11 @@ setup(
     author_email=about["__author_email__"],
     license=about["__license__"],
     keywords="Robotic Process Automation,RPA, UltimateRPA, timeout, time limit",
+    packages_data = {"urpatimeout": ["py.typed"]}
     packages=["urpatimeout"],
     python_requires=">=3.7",
     classifiers=[
         "License :: OSI Approved :: MIT License",
     ],
+    zip_safe=False,
 )
