@@ -44,7 +44,7 @@ while not timeout.is_expired():
 import datetime
 import urpatimeout
 
-timeout = urpatimeout.Timeout(datetime.datetime(2O29, 1, 15))
+timeout = urpatimeout.Timeout(datetime.datetime(2029, 1, 15))
 while not timeout.is_expired():
     do_something_else()
 ```
