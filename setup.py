@@ -18,8 +18,8 @@ setup(
     author=about["__author__"],
     author_email=about["__author_email__"],
     license=about["__license__"],
-    keywords="Robotic Process Automation,RPA, UltimateRPA, timeout, time limit",
-    packages_data = {"urpatimeout": ["py.typed"]}
+    keywords="Robotic Process Automation, RPA, UltimateRPA, timeout, time limit",
+    packages_data = {"urpatimeout": ["py.typed"]},
     packages=["urpatimeout"],
     python_requires=">=3.7",
     classifiers=[
