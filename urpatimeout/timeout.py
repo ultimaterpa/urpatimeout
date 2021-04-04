@@ -36,6 +36,10 @@ class Timeout:
         self.start = time.time_ns()
         self.timeout = self._set_timeout(timeout)
 
+    def __repr__(self):
+        start = datetime.datetime.fromtimestamp(self.start / 1_000_000_000)
+        return f"<Timeout starts at: '{start}' and ends in: '{self.timeout}' ms>"
+
     def _set_timeout(self, timeout: Union[int, datetime.datetime]) -> int:
         """Checks, recalculates and returns a time limit.
 
