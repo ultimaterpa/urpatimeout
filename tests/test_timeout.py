@@ -65,6 +65,25 @@ def test_expired_input_datetime():
     assert t.is_expired()
 
 
+@pytest.mark.smoke
+@freezegun.freeze_time(auto_tick_seconds=5)
+def test_reset():
+    t = Timeout(10000)
+    assert not t.is_expired()
+    t.reset()
+    assert not t.is_expired()
+    assert t.is_expired()
+
+
+@pytest.mark.smoke
+@freezegun.freeze_time(auto_tick_seconds=5)
+def test_reset_and_set():
+    t = Timeout(10000)
+    assert not t.is_expired()
+    t.reset(5000)
+    assert t.is_expired()
+
+
 @given(
     timeout=st.integers(min_value=0) | st.datetimes(min_value=datetime.datetime.now())
 )
@@ -92,10 +111,10 @@ def test_is_expired_type(timeout):
     assert isinstance(t.is_expired(), bool)
 
 
-@given(type_error_timeout=everything_except((int, datetime.datetime)))
-def test_type_error(type_error_timeout):
+@given(timeout=everything_except((int, datetime.datetime)))
+def test_type_error(timeout):
     with pytest.raises(TypeError):
-        Timeout(type_error_timeout)
+        Timeout(timeout)
 
 
 @given(
@@ -104,3 +123,19 @@ def test_type_error(type_error_timeout):
 def test_value_error(timeout):
     with pytest.raises(ValueError):
         Timeout(timeout)
+
+
+@given(timeout=everything_except((type(None), int, datetime.datetime)))
+def test_reset_type_error(timeout):
+    t = Timeout(1000)
+    with pytest.raises(TypeError):
+        t.reset(timeout)
+
+
+@given(
+    timeout=st.integers(max_value=-1) | st.datetimes(max_value=datetime.datetime.now())
+)
+def test_value_error(timeout):
+    t = Timeout(1000)
+    with pytest.raises(ValueError):
+        t.reset(timeout)

@@ -4,7 +4,7 @@ https://www.ultimaterpa.com
 Features:
 It helps you with setting up and measuring time limits:
 - set up timeout for multiple searches in UltimateRPA
-- set up timeout for part or whole of the script
+- set up timeout for part or the whole script
 - use `datetime.datetime` as an input
 - no 3rd party modules dependencies
 """
@@ -29,11 +29,24 @@ class Timeout:
     def __init__(self, timeout: Union[int, datetime.datetime]) -> None:
         """Initialization of instance of class Timeout.
 
-            Args:
-                timeout: int or datetime.datetime
-                    Duration of time limit in ms or date.
+        Args:
+            timeout: int or datetime.datetime object
+                Duration of time limit in ms or date.
         """
         self.start = time.time_ns()
+        self.timeout = self._set_timeout(timeout)
+
+    def _set_timeout(self, timeout: Union[int, datetime.datetime]) -> int:
+        """Checks, recalculates and returns a time limit.
+
+        Args:
+            timeout int or datatime.datetime object
+                Duration of the time in ms or date.
+
+        Returns:
+            int
+        """
+
         if not isinstance(timeout, (int, datetime.datetime)):
             raise TypeError(
                 f"timeout type must be an int or datetime.datetime, not a '{type(timeout)}'!"
@@ -46,28 +59,39 @@ class Timeout:
             raise ValueError(
                 "timeout value must be a positive int or a datetime.datetime in the future!"
             )
-        self.timeout = timeout
+        return timeout
 
     def elapsed(self) -> int:
         """Returns integer which shows how many ms have passed since the start of time limit.
 
-            Returns:
-                int
+        Returns:
+            int
         """
         return (time.time_ns() - self.start) // 1_000_000
 
     def remaining(self) -> int:
         """Returns integer which shows how many ms are remaining till the expiration of time limit.
 
-            Returns:
-                int
+        Returns:
+            int
         """
         return self.timeout - self.elapsed()
 
     def is_expired(self) -> bool:
         """Returns True if time limit expired.
 
-            Returns:
-                bool
+        Returns:
+            bool
         """
         return self.remaining() <= 0
+
+    def reset(self, timeout: Union[None, int, datetime.datetime] = None) -> None:
+        """Resets the starting time of the timeout.
+
+        Args:
+            timeout: None, int or datetime.datetime
+                Omit te keep the time limit or set a new one.
+        """
+        self.start = time.time_ns()
+        if timeout is not None:
+            self.timeout = self._set_timeout(timeout)
