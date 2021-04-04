@@ -139,3 +139,13 @@ def test_value_error(timeout):
     t = Timeout(1000)
     with pytest.raises(ValueError):
         t.reset(timeout)
+
+
+@given(timeout=st.integers(min_value=0))
+@freezegun.freeze_time("2000-01-15 00:00:00")
+def test_repr(timeout):
+    t = Timeout(timeout)
+    assert (
+        repr(t)
+        == f"<Timeout starts at: '2000-01-15 00:00:00' and ends in: '{timeout}' ms>"
+    )
