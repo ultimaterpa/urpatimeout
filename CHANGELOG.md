@@ -6,13 +6,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2020-06-15
+## [0.2.0] - 2021-04-04
+
 ### Added
+
+- a optional parameter `past_safe` in the Timeout class
+- a `reset` method which resets the timeout
+- nice repr for the Timeout class
+- the package is ready to use for type checking
+- a new keyword `Robotic Process Automation` to the `setup.py`
+
+### Changed
+
+- correct few mistakes in the `README.md` 
+- tests refactoring
+
+## [0.1.0] - 2020-06-15
+
+### Added
+
 - Support for `datetime.datetime` as an input.
 - `dev_requirements.txt` file.
 - `CHANGELOG.md`
 
 ### Changed
+
 - Tests use `hypothesis`.
 - `README.md` clean up.
 - Docstrings clean up.

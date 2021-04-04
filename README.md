@@ -38,7 +38,7 @@ while not timeout.is_expired():
 	do_something()
 ```
 
-### Using datatime.datetime for Setting up the Timeout
+### Using datatime.datetime Object for Setting up the Timeout
 
 ```python
 import datetime
@@ -47,6 +47,17 @@ import urpatimeout
 timeout = urpatimeout.Timeout(datetime.datetime(2029, 1, 15))
 while not timeout.is_expired():
     do_something_else()
+```
+
+### Reseting the Timeout
+
+```python
+import urpatimeout
+timeout = urpatimeout.Timeout(10_000)
+while not timeout.is_expired():
+    do_something()
+    if this_happened():
+        t.reset(5000)
 ```
 
 ## Changelog
