@@ -35,7 +35,7 @@ class Timeout:
             timeout: int or datetime.datetime object
                 Duration of time limit in ms or date.
             past_safe: bool
-
+                Set to False to ignore negative timeout value.
         """
         self.start = time.time_ns()
         self.past_safe = past_safe
@@ -66,7 +66,8 @@ class Timeout:
             ) // 1_000_000
         if timeout < 0 and self.past_safe:
             raise ValueError(
-                "timeout value must be a positive int or a datetime.datetime in the future!"
+                "timeout value must be a positive int or a datetime.datetime in the future"
+                " or consider set a past_safe parameter to False!"
             )
         return timeout
 
@@ -99,7 +100,7 @@ class Timeout:
 
         Args:
             timeout: None, int or datetime.datetime
-                Omit te keep the time limit or set a new one.
+                Omit to keep the time limit or set a new one.
         """
         self.start = time.time_ns()
         if timeout is not None:
