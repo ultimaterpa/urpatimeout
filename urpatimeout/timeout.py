@@ -26,19 +26,24 @@ class Timeout:
         app.find_first(cf.name("Doe"), search_timeout)
     """
 
-    def __init__(self, timeout: Union[int, datetime.datetime]) -> None:
+    def __init__(
+        self, timeout: Union[int, datetime.datetime], past_safe: bool = True
+    ) -> None:
         """Initialization of instance of class Timeout.
 
         Args:
             timeout: int or datetime.datetime object
                 Duration of time limit in ms or date.
+            past_safe: bool
+
         """
         self.start = time.time_ns()
+        self.past_safe = past_safe
         self.timeout = self._set_timeout(timeout)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         start = datetime.datetime.fromtimestamp(self.start / 1_000_000_000)
-        return f"<Timeout starts at: '{start}' and ends in: '{self.timeout}' ms>"
+        return f"<Timeout starts at: '{start}' and ends at: '{self.timeout}' ms>"
 
     def _set_timeout(self, timeout: Union[int, datetime.datetime]) -> int:
         """Checks, recalculates and returns a time limit.
@@ -59,7 +64,7 @@ class Timeout:
             timeout = (
                 int(timeout.timestamp() * 1_000_000_000) - self.start
             ) // 1_000_000
-        if timeout < 0:
+        if timeout < 0 and self.past_safe:
             raise ValueError(
                 "timeout value must be a positive int or a datetime.datetime in the future!"
             )

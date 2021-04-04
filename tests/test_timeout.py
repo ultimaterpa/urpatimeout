@@ -66,6 +66,20 @@ def test_expired_input_datetime():
 
 
 @pytest.mark.smoke
+@freezegun.freeze_time()
+def test_past_unsafe_input_int():
+    t = Timeout(-1000, past_safe=False)
+    assert t.is_expired()
+
+
+@pytest.mark.smoke
+@freezegun.freeze_time("2000-1-15 00:00:00")
+def test_past_unsafe_input_datetime():
+    t = Timeout(datetime.datetime(2000, 1, 14, 0, 0, 10), past_safe=False)
+    assert t.is_expired()
+
+
+@pytest.mark.smoke
 @freezegun.freeze_time(auto_tick_seconds=5)
 def test_reset():
     t = Timeout(10000)
@@ -147,5 +161,5 @@ def test_repr(timeout):
     t = Timeout(timeout)
     assert (
         repr(t)
-        == f"<Timeout starts at: '2000-01-15 00:00:00' and ends in: '{timeout}' ms>"
+        == f"<Timeout starts at: '2000-01-15 00:00:00' and ends at: '{timeout}' ms>"
     )
