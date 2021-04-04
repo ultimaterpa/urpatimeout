@@ -8,6 +8,8 @@ import pytest
 
 from urpatimeout import Timeout
 
+FREEZE_DATE = "2000-01-15 00:00:00"
+
 
 def everything_except(excluded_types):
     return (
@@ -26,7 +28,7 @@ def test_remaining_input_int():
 
 
 @pytest.mark.smoke
-@freezegun.freeze_time("2000-1-15 00:00:00", auto_tick_seconds=5)
+@freezegun.freeze_time(FREEZE_DATE, auto_tick_seconds=5)
 def test_remaining_input_datetime():
     t = Timeout(datetime.datetime(2000, 1, 15, 0, 0, 10))
     assert t.remaining() == 5000
@@ -42,7 +44,7 @@ def test_elapsed_input_int():
 
 
 @pytest.mark.smoke
-@freezegun.freeze_time("2000-1-15 00:00:00", auto_tick_seconds=5)
+@freezegun.freeze_time(FREEZE_DATE, auto_tick_seconds=5)
 def test_elapsed_input_datetime():
     t = Timeout(datetime.datetime(2000, 1, 15, 0, 0, 10))
     assert t.elapsed() == 5000
@@ -58,9 +60,11 @@ def test_expired_input_int():
 
 
 @pytest.mark.smoke
-@freezegun.freeze_time("2000-1-15 00:00:00", auto_tick_seconds=5)
+@freezegun.freeze_time(FREEZE_DATE, auto_tick_seconds=5)
 def test_expired_input_datetime():
-    t = Timeout(datetime.datetime(2000, 1, 15, 0, 0, 10))
+    t = Timeout(
+        datetime.datetime.fromisoformat(FREEZE_DATE) + datetime.timedelta(seconds=10)
+    )
     assert not t.is_expired()
     assert t.is_expired()
 
@@ -73,9 +77,12 @@ def test_past_unsafe_input_int():
 
 
 @pytest.mark.smoke
-@freezegun.freeze_time("2000-1-15 00:00:00")
+@freezegun.freeze_time(FREEZE_DATE)
 def test_past_unsafe_input_datetime():
-    t = Timeout(datetime.datetime(2000, 1, 14, 0, 0, 10), past_safe=False)
+    t = Timeout(
+        datetime.datetime.fromisoformat(FREEZE_DATE) - datetime.timedelta(days=1),
+        past_safe=False,
+    )
     assert t.is_expired()
 
 
@@ -156,10 +163,9 @@ def test_value_error(timeout):
 
 
 @given(timeout=st.integers(min_value=0))
-@freezegun.freeze_time("2000-01-15 00:00:00")
+@freezegun.freeze_time(FREEZE_DATE)
 def test_repr(timeout):
     t = Timeout(timeout)
     assert (
-        repr(t)
-        == f"<Timeout starts at: '2000-01-15 00:00:00' and ends at: '{timeout}' ms>"
+        repr(t) == f"<Timeout starts at: '{FREEZE_DATE}' and ends at: '{timeout}' ms>"
     )
