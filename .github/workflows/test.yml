@@ -1,4 +1,10 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# This workflow will
+# - upgrade pip
+# - checks with Black
+# - checks with flake8
+# - run pytest
+# - checks with mypy
+#s
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
 name: Python Tests
@@ -12,7 +18,11 @@ on:
 jobs:
   build:
 
-    runs-on: windows-2019
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+          os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@v2
@@ -20,16 +30,25 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.7
-    - name: Install dependencies
+    - name: Upgrade pip
       run: |
         python -m pip install --upgrade pip
-        pip install black flake8 pytest hypothesis freezegun 
+    - name: Check with Black
+      run: |
+          pip install black
+          black . --line-lenght 120 --check 
     - name: Lint with flake8
       run: |
+        pip install flake8
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings.
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
     - name: Test with pytest
       run: |
-        pytest
+        pip install pytest pytest-cov hypothesis freezegun  
+        pytest --cov=urpatimeout
+    - name: Check with mypy
+      run: |
+        pip install mypy
+        mypy urpatimeout
