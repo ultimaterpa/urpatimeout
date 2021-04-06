@@ -26,9 +26,7 @@ class Timeout:
         app.find_first(cf.name("Doe"), search_timeout)
     """
 
-    def __init__(
-        self, timeout: Union[int, datetime.datetime], past_safe: bool = True
-    ) -> None:
+    def __init__(self, timeout: Union[int, datetime.datetime], past_safe: bool = True) -> None:
         """Initialization of instance of class Timeout.
 
         Args:
@@ -57,13 +55,9 @@ class Timeout:
         """
 
         if not isinstance(timeout, (int, datetime.datetime)):
-            raise TypeError(
-                f"timeout type must be an int or datetime.datetime, not a '{type(timeout)}'!"
-            )
+            raise TypeError(f"timeout type must be an int or datetime.datetime, not a '{type(timeout)}'!")
         if isinstance(timeout, datetime.datetime):
-            timeout = (
-                int(timeout.timestamp() * 1_000_000_000) - self.start
-            ) // 1_000_000
+            timeout = (int(timeout.timestamp() * 1_000_000_000) - self.start) // 1_000_000
         if timeout < 0 and self.past_safe:
             raise ValueError(
                 "timeout value must be a positive int or a datetime.datetime in the future"
