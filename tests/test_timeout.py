@@ -72,7 +72,10 @@ def test_past_unsafe_input_int():
 @pytest.mark.smoke
 @freezegun.freeze_time(FREEZE_DATE)
 def test_past_unsafe_input_datetime():
-    t = Timeout(datetime.datetime.fromisoformat(FREEZE_DATE) - datetime.timedelta(days=1), past_safe=False,)
+    t = Timeout(
+        datetime.datetime.fromisoformat(FREEZE_DATE) - datetime.timedelta(days=1),
+        past_safe=False,
+    )
     assert t.is_expired()
 
 

@@ -22,7 +22,9 @@ setup(
     packages_data={"urpatimeout": ["py.typed"]},
     packages=["urpatimeout"],
     python_requires=">=3.7",
-    classifiers=["License :: OSI Approved :: MIT License",],
+    classifiers=[
+        "License :: OSI Approved :: MIT License",
+    ],
     zip_safe=False,
     include_package_data=True,
 )
