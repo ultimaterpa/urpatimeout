@@ -1,5 +1,4 @@
 import datetime
-import time
 
 import freezegun
 from hypothesis import given
@@ -12,11 +11,7 @@ FREEZE_DATE = "2000-01-15 00:00:00"
 
 
 def everything_except(excluded_types):
-    return (
-        st.from_type(type)
-        .flatmap(st.from_type)
-        .filter(lambda x: not isinstance(x, excluded_types))
-    )
+    return st.from_type(type).flatmap(st.from_type).filter(lambda x: not isinstance(x, excluded_types))
 
 
 @pytest.mark.smoke
@@ -62,9 +57,7 @@ def test_expired_input_int():
 @pytest.mark.smoke
 @freezegun.freeze_time(FREEZE_DATE, auto_tick_seconds=5)
 def test_expired_input_datetime():
-    t = Timeout(
-        datetime.datetime.fromisoformat(FREEZE_DATE) + datetime.timedelta(seconds=10)
-    )
+    t = Timeout(datetime.datetime.fromisoformat(FREEZE_DATE) + datetime.timedelta(seconds=10))
     assert not t.is_expired()
     assert t.is_expired()
 
@@ -79,10 +72,7 @@ def test_past_unsafe_input_int():
 @pytest.mark.smoke
 @freezegun.freeze_time(FREEZE_DATE)
 def test_past_unsafe_input_datetime():
-    t = Timeout(
-        datetime.datetime.fromisoformat(FREEZE_DATE) - datetime.timedelta(days=1),
-        past_safe=False,
-    )
+    t = Timeout(datetime.datetime.fromisoformat(FREEZE_DATE) - datetime.timedelta(days=1), past_safe=False,)
     assert t.is_expired()
 
 
@@ -106,7 +96,8 @@ def test_reset_and_set():
 
 
 @given(
-    timeout=st.integers(min_value=0) | st.datetimes(min_value=datetime.datetime.now())
+    timeout=st.integers(min_value=0)
+    | st.datetimes(min_value=datetime.datetime.now(), max_value=datetime.datetime(2038, 1, 1))
 )
 @freezegun.freeze_time(auto_tick_seconds=1)
 def test_remaining_type(timeout):
@@ -115,7 +106,8 @@ def test_remaining_type(timeout):
 
 
 @given(
-    timeout=st.integers(min_value=0) | st.datetimes(min_value=datetime.datetime.now())
+    timeout=st.integers(min_value=0)
+    | st.datetimes(min_value=datetime.datetime.now(), max_value=datetime.datetime(2038, 1, 1))
 )
 @freezegun.freeze_time(auto_tick_seconds=1)
 def test_elapsed_type(timeout):
@@ -124,7 +116,8 @@ def test_elapsed_type(timeout):
 
 
 @given(
-    timeout=st.integers(min_value=0) | st.datetimes(min_value=datetime.datetime.now())
+    timeout=st.integers(min_value=0)
+    | st.datetimes(min_value=datetime.datetime.now(), max_value=datetime.datetime(2038, 1, 1))
 )
 @freezegun.freeze_time(auto_tick_seconds=1)
 def test_is_expired_type(timeout):
@@ -139,7 +132,8 @@ def test_type_error(timeout):
 
 
 @given(
-    timeout=st.integers(max_value=-1) | st.datetimes(max_value=datetime.datetime.now())
+    timeout=st.integers(max_value=-1)
+    | st.datetimes(min_value=datetime.datetime(1970, 1, 1), max_value=datetime.datetime.now())
 )
 def test_value_error(timeout):
     with pytest.raises(ValueError):
@@ -154,9 +148,10 @@ def test_reset_type_error(timeout):
 
 
 @given(
-    timeout=st.integers(max_value=-1) | st.datetimes(max_value=datetime.datetime.now())
+    timeout=st.integers(max_value=-1)
+    | st.datetimes(min_value=datetime.datetime(1970, 1, 1), max_value=datetime.datetime.now())
 )
-def test_value_error(timeout):
+def test_reset_value_error(timeout):
     t = Timeout(1000)
     with pytest.raises(ValueError):
         t.reset(timeout)
@@ -166,6 +161,4 @@ def test_value_error(timeout):
 @freezegun.freeze_time(FREEZE_DATE)
 def test_repr(timeout):
     t = Timeout(timeout)
-    assert (
-        repr(t) == f"<Timeout starts at: '{FREEZE_DATE}' and ends at: '{timeout}' ms>"
-    )
+    assert repr(t) == f"<Timeout starts at: '{FREEZE_DATE}' and ends at: '{timeout}' ms>"
