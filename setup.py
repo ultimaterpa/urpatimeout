@@ -23,6 +23,9 @@ setup(
     packages=["urpatimeout"],
     python_requires=">=3.7",
     classifiers=[
+        "Intended Audience :: Developers",
+        "Programming Language :: Python",
+        "Operating System :: Microsoft :: Windows",
         "License :: OSI Approved :: MIT License",
     ],
     zip_safe=False,
