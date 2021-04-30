@@ -24,7 +24,7 @@ setup(
     python_requires=">=3.7",
     classifiers=[
         "Intended Audience :: Developers",
-        "Programming Language :: Python",
+        "Programming Language :: Python :: 3.7",
         "Operating System :: Microsoft :: Windows",
         "License :: OSI Approved :: MIT License",
     ],
