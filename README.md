@@ -1,13 +1,13 @@
 # urpatimeout
-urpatimeout is a module for managing timeouts inside [UltimateRPA](https://www.ultimaterpa.com) scripts.
+urpatimeout is a module for timeouts' management inside [UltimateRPA](https://www.ultimaterpa.com) scripts.
 
 ## Features
 
 It helps you with setting up and measuring time limits:
 - set up timeout for multiple searches in UltimateRPA
-- set up timeout for part or whole of the script
+- set up timeout for partial of full script
 - use `datetime.datetime` as an input
-- no 3rd party modules dependencies
+- no 3rd party modules dependencies required
 
 ## Install
 

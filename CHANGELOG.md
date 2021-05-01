@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- a optional parameter `past_safe` in the Timeout class
+- an optional parameter `past_safe` in the Timeout class
 - a `reset` method which resets the timeout
 - nice repr for the Timeout class
 - the package is ready to use for type checking
@@ -34,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- correct few mistakes in the `README.md` 
+- corrected few mistakes in the `README.md` 
 - tests refactoring
 
 ## [0.1.0] - 2020-06-15
