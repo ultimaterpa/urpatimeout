@@ -1,4 +1,9 @@
 # urpatimeout
+
+![workflow](https://github.com/ultimaterpa/urpatimeout/actions/workflows/test.yml/badge.svg)
+[![PyPi version](https://pypip.in/v/urpatimeout/badge.png)](https://crate.io/packages/urpatimeout/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 urpatimeout is a module for timeouts' management inside [UltimateRPA](https://www.ultimaterpa.com) scripts.
 
 ## Features
