@@ -22,7 +22,7 @@ pip install urpatimeout
 
 ## Examples
 
-### Setting up a Global Timeout for Multiple Searches 
+### Setting up a Global Timeout for Multiple Searches
 
 ```python
 import urpatimeout
@@ -62,8 +62,23 @@ timeout = urpatimeout.Timeout(10_000)
 while not timeout.is_expired():
     do_something()
     if this_happened():
-        t.reset(5000)
+        # This reset the starting time of the timeout. Optionally, you can set a new time limit with t.reset(5000).
+        t.reset()
 ```
+
+### Optional past_safe Parameter
+
+
+```python
+import datetime
+import urpatimeout
+
+# This raise ValueError
+timeout = urpatimeout.Timeout(datetime.datetime(1990, 1, 1))
+# This doesn't raise ValueError
+timeout = urpatimeout.Timeout(datetime.datetime(1990, 1, 1), past_safe=False)
+```
+
 
 ## Changelog
 

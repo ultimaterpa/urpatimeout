@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- better examples in the `README.md`
+
 ## [0.2.2] - 2021-04-06
 
 ### Added
@@ -14,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- hypothesis datetime strategies tes test for Windows
+- hypothesis datetime strategies test for OS Windows
 
 ## [0.2.1] - 2021-04-04
 
@@ -29,12 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - an optional parameter `past_safe` in the Timeout class
 - a `reset` method which resets the timeout
 - nice repr for the Timeout class
-- the package is ready to use for type checking
+- the package is ready to use with the type checking
 - a new keyword `Robotic Process Automation` to the `setup.py`
 
 ### Changed
 
-- corrected few mistakes in the `README.md` 
+- corrected few mistakes in the `README.md`
 - tests refactoring
 
 ## [0.1.0] - 2020-06-15
