@@ -1,3 +1,2 @@
+from .__about__ import __description__, __title__, __url__, __version__
 from .timeout import Timeout
-
-from .__about__ import __title__, __version__, __description__, __url__

@@ -66,6 +66,24 @@ while not timeout.is_expired():
         t.reset()
 ```
 
+### Keep timeout even an app crash 
+
+You can set the optional attribute `persistent`
+- False 
+  - set by default 
+  - when the app crash, timeout will be set on the same value
+- True 
+  - `starting time` and `timeout` are stored in case of the app crash
+  - if the app can run only in specific time, for example from 2pm to 4pm
+
+```python
+import urpatimeout
+
+timeout = urpatimeout.Timeout(2 * 60 * 1000, persistent=True)
+while not timeout.is_expired():
+    do_something()
+```
+
 ### Optional past_safe Parameter
 
 
