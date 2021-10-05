@@ -55,6 +55,8 @@ while not timeout.is_expired():
 ```
 
 ### Reseting the Timeout
+If is `persistent` argument set to `True`, starting time will be overwritten with current time 
+and timeout will be possibly set at new one
 
 ```python
 import urpatimeout
@@ -66,7 +68,11 @@ while not timeout.is_expired():
         t.reset()
 ```
 
-### Keep timeout even an app crash 
+### Keep timeout even an app crash with an argument `persistent`
+
+You can set this attribute to True, if you wish to run your app in only specific time, for example, 
+if you start your app at 2pm, and you specify timeout for 2hours, the app will run only from 2pm to 4pm, 
+even if the app crashes for a specific amount of time during the runtime.
 
 You can set the optional attribute `persistent`
 - False 
@@ -74,7 +80,7 @@ You can set the optional attribute `persistent`
   - when the app crash, timeout will be set on the same value
 - True 
   - `starting time` and `timeout` are stored in case of the app crash
-  - if the app can run only in specific time, for example from 2pm to 4pm
+  - when the app crash, timeout will be checked and eventually set for remaining time
 
 ```python
 import urpatimeout

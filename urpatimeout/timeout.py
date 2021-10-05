@@ -12,14 +12,12 @@ It helps you with setting up and measuring time limits:
 from __future__ import annotations
 
 import datetime
+import json
 import os.path
 import time
 from typing import Union
 
-import urpautils
-
-START_STAMP_FILE = "start.txt"
-TIMEOUT_STAMP_FILE = "timeout.txt"
+PERSISTENT_TMP_FILE = "timeout_tmp.json"
 
 
 class Timeout:
@@ -75,11 +73,13 @@ class Timeout:
                 " or consider set a past_safe parameter to False!"
             )
         if self.persistent:
-            if os.path.isfile(TIMEOUT_STAMP_FILE) and os.path.isfile(START_STAMP_FILE):
-                timeout = int(urpautils.read_txt_file(TIMEOUT_STAMP_FILE))
-                self.start = int(urpautils.read_txt_file(START_STAMP_FILE))
-            urpautils.write_txt_file(TIMEOUT_STAMP_FILE, str(timeout), mode="w")
-            urpautils.write_txt_file(START_STAMP_FILE, str(self.start), mode="w")
+            if os.path.isfile(PERSISTENT_TMP_FILE):
+                with open(PERSISTENT_TMP_FILE, "r", encoding="utf-8") as file:
+                    data = json.load(file)
+                timeout = data["timeout"]
+                self.start = data["start"]
+            with open(PERSISTENT_TMP_FILE, "w", encoding="utf-8") as file:
+                json.dump({"start": self.start, "timeout": timeout}, file, ensure_ascii=False)
         return timeout
 
     def elapsed(self) -> int:
@@ -104,10 +104,9 @@ class Timeout:
         Returns:
             bool
         """
-        print(self.remaining())
         if self.remaining() <= 0:
-            urpautils.remove(START_STAMP_FILE)
-            urpautils.remove(TIMEOUT_STAMP_FILE)
+            if os.path.isfile(PERSISTENT_TMP_FILE):
+                os.remove(PERSISTENT_TMP_FILE)
             return True
         return False
 
@@ -118,8 +117,9 @@ class Timeout:
             timeout: None, int or datetime.datetime
                 Omit to keep the time limit or set a new one.
         """
-        urpautils.remove(START_STAMP_FILE)
-        urpautils.remove(TIMEOUT_STAMP_FILE)
         self.start = time.time_ns()
         if timeout is not None:
             self.timeout = self._set_timeout(timeout)
+        else:
+            with open(PERSISTENT_TMP_FILE, "w", encoding="utf-8") as file:
+                json.dump({"start": self.start, "timeout": self.timeout}, file, ensure_ascii=False)
