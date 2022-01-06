@@ -10,9 +10,14 @@ It helps you with setting up and measuring time limits:
 """
 
 from __future__ import annotations
+
 import datetime
+import json
+import os.path
 import time
 from typing import Union
+
+PERSISTENT_TMP_FILE = "timeout_tmp.json"
 
 
 class Timeout:
@@ -26,7 +31,9 @@ class Timeout:
         app.find_first(cf.name("Doe"), search_timeout)
     """
 
-    def __init__(self, timeout: Union[int, datetime.datetime], past_safe: bool = True) -> None:
+    def __init__(
+        self, timeout: Union[int, datetime.datetime], past_safe: bool = True, persistent: bool = False
+    ) -> None:
         """Initialization of instance of class Timeout.
 
         Args:
@@ -34,9 +41,12 @@ class Timeout:
                 Duration of time limit in ms or date.
             past_safe: bool
                 Set to False to ignore negative timeout value.
+            persistent: bool
+                Set to True to save timout in case of application crash
         """
         self.start = time.time_ns()
         self.past_safe = past_safe
+        self.persistent = persistent
         self.timeout = self._set_timeout(timeout)
 
     def __repr__(self) -> str:
@@ -53,7 +63,6 @@ class Timeout:
         Returns:
             int
         """
-
         if not isinstance(timeout, (int, datetime.datetime)):
             raise TypeError(f"timeout type must be an int or datetime.datetime, not a '{type(timeout)}'!")
         if isinstance(timeout, datetime.datetime):
@@ -63,6 +72,14 @@ class Timeout:
                 "timeout value must be a positive int or a datetime.datetime in the future"
                 " or consider set a past_safe parameter to False!"
             )
+        if self.persistent:
+            if os.path.isfile(PERSISTENT_TMP_FILE):
+                with open(PERSISTENT_TMP_FILE, "r", encoding="utf-8") as file:
+                    data = json.load(file)
+                timeout = data["timeout"]
+                self.start = data["start"]
+            with open(PERSISTENT_TMP_FILE, "w", encoding="utf-8") as file:
+                json.dump({"start": self.start, "timeout": timeout}, file, ensure_ascii=False)
         return timeout
 
     def elapsed(self) -> int:
@@ -87,7 +104,11 @@ class Timeout:
         Returns:
             bool
         """
-        return self.remaining() <= 0
+        if self.remaining() <= 0:
+            if os.path.isfile(PERSISTENT_TMP_FILE):
+                os.remove(PERSISTENT_TMP_FILE)
+            return True
+        return False
 
     def reset(self, timeout: Union[None, int, datetime.datetime] = None) -> None:
         """Resets the starting time of the timeout.
@@ -99,3 +120,6 @@ class Timeout:
         self.start = time.time_ns()
         if timeout is not None:
             self.timeout = self._set_timeout(timeout)
+        else:
+            with open(PERSISTENT_TMP_FILE, "w", encoding="utf-8") as file:
+                json.dump({"start": self.start, "timeout": self.timeout}, file, ensure_ascii=False)
