@@ -54,7 +54,7 @@ while not timeout.is_expired():
     do_something_else()
 ```
 
-### Reseting the Timeout
+### Resetting the Timeout
 
 ```python
 import urpatimeout
